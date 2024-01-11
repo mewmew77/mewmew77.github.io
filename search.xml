@@ -3,6 +3,16 @@
   <entry>
     <title>ansible 踩坑记录</title>
     <url>/2024/01/09/ansible-%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h2 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h2><p>down掉目标主机网口后，ansible-playbook 执行很长时间才返回ssh连接超时错误</p>
+<h2 id="复现经过："><a href="#复现经过：" class="headerlink" title="复现经过："></a>复现经过：</h2><p>方式一：直接将对应网口down掉，执行ansible-playbook，很快报错，未复现；<br>方式二：先正常执行一次ansible-playbook，执行完成后down掉网口，再次执行ansible-playbook,复现成功；</p>
+<h2 id="问题原因：ssh多路复用"><a href="#问题原因：ssh多路复用" class="headerlink" title="问题原因：ssh多路复用"></a>问题原因：<strong>ssh多路复用</strong></h2><p>为了提升ansible的执行效率，启用了ssh的多路复用（可以认为是建立长链接），即在首次 ssh 连接之后，将该连接保持在后台，并在后续连接时重用该连接，<br>从而减少连接建立和认证的时间，提高连接速度和效率。对应ansible配置文件 <code>ansible/ansible.cfg</code> 内容如下：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh_args = -o ControlMaster=auto -o ControlPersist=600s</span><br></pre></td></tr></table></figure></div>
+<p>也就是说，当网口up时ssh连接成功后会保持这个连接通道，直到600s后过期销毁。<br>在有效期内，down掉目标主机对应网口，再次执行ansible-playbook进行ssh连接，则会重用之前的连接。<br>ssh连接还存在，但目标主机已经不通了，再次使用这个连接就会直到此连接到期销毁才能检测到错误并返回</p>
+<h2 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h2><p>配置文件中添加如下配置参数，每30s对目标节点进行心跳检测，若尝试2次都失败，则销毁此连接；再次重连时就会尝试创建新的ssh连接。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh_args = -o ControlMaster=auto -o ControlPersist=600s -o ServerAliveInterval=30 -o ServerAliveCountMax=2</span><br></pre></td></tr></table></figure></div>
+]]></content>
+      <tags>
+        <tag>ansible</tag>
+      </tags>
   </entry>
 </search>
