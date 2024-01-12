@@ -13,17 +13,22 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/"/>
+    <link rel="canonical" href="http://example.com/2023/01/09/ansible-踩坑记录/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta property="og:type" content="website">
-<meta property="og:title" content="春夏秋冬">
-<meta property="og:url" content="http://example.com/index.html">
+        <meta name="description" content="背景：down掉目标主机网口后，ansible-playbook 执行很长时间才返回ssh连接超时错误 复现经过：方式一：直接将对应网口down掉，执行ansible-playbook，很快报错，未复现；方式二：先正常执行一次ansible-playbook，执行完成后down掉网口，再次执行ansible-playbook,复现成功； 问题原因：ssh多路复用为了提升ansible的执行效率，启">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ansible 踩坑记录">
+<meta property="og:url" content="http://example.com/2023/01/09/ansible-%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="春夏秋冬">
+<meta property="og:description" content="背景：down掉目标主机网口后，ansible-playbook 执行很长时间才返回ssh连接超时错误 复现经过：方式一：直接将对应网口down掉，执行ansible-playbook，很快报错，未复现；方式二：先正常执行一次ansible-playbook，执行完成后down掉网口，再次执行ansible-playbook,复现成功； 问题原因：ssh多路复用为了提升ansible的执行效率，启">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-01-09T15:21:18.000Z">
+<meta property="article:modified_time" content="2024-01-12T17:39:15.270Z">
 <meta property="article:author" content="mewmew">
+<meta property="article:tag" content="ansible">
 <meta name="twitter:card" content="summary">
     
     
@@ -35,6 +40,8 @@
     <!--- Page Info-->
     
     <title>
+        
+            ansible 踩坑记录 -
         
         春夏秋冬
     </title>
@@ -261,63 +268,6 @@
 <main class="page-container" id="swup">
 
     
-        
-    <style>
-        .home-banner-container {
-            background: none !important;
-        }
-        .home-article-item,
-        .sidebar-links,
-        .sidebar-content,
-        a.page-number,
-        a.extend,
-        .sidebar-links .links:hover,
-        .right-bottom-tools,
-        footer.footer {
-            background-color: var(--background-color-transparent-80) !important;
-        }
-        .right-bottom-tools:hover,
-        a.page-number:hover,
-        a.extend:hover {
-            background-color: var(--primary-color) !important;
-        }
-        .site-info,
-        .home-article-sticky-label {
-            background-color: var(--background-color-transparent-15) !important;
-        }
-        .home-article-sticky-label {
-            backdrop-filter: none !important;
-        }
-    </style>
-    <div class="home-banner-background transition-fade fixed top-0 left-0 w-screen h-screen scale-125 sm:scale-110 box-border will-change-transform bg-cover">
-        <img src="/images/wallhaven-wqery6-light.webp" alt="home-banner-background" class="w-full h-full object-cover dark:hidden">
-        <img src="/images/wallhaven-wqery6-dark.webp" alt="home-banner-background" class="w-full h-full object-cover hidden dark:block">
-    </div>
-
-
-<div class="home-banner-container flex justify-center items-center transition-fade relative">
-    
-    <div class="content mt-8 flex flex-col justify-center items-center">
-        <div class="description flex flex-col justify-center items-center w-screen font-medium text-center"
-        
-        >
-            春夏秋冬
-            
-            
-                <p><i id="subtitle"></i></p>
-            
-        </div>
-        
-    </div>
-    <script>
-        const scrollToMain = ()=> {
-            console.log('scroll');
-            const target = document.querySelector('.main-content-container');
-            target.scrollIntoView({ behavior: 'smooth'});
-        }
-    </script>
-</div>
-    
 
     <div class="main-content-container">
 
@@ -325,7 +275,7 @@
         <div class="main-content-header">
             <header class="navbar-container">
 
-    <div class="navbar-content has-home-banner">
+    <div class="navbar-content">
         <div class="left">
             
                 <a class="logo-image" href="/">
@@ -333,9 +283,9 @@
                 </a>
             
             <a class="logo-title" href="/">
-                <h1>
+                
                 春夏秋冬
-                </h1>
+                
             </a>
         </div>
 
@@ -349,7 +299,7 @@
 
                             <li class="navbar-item">
                                 <!-- Menu -->
-                                <a class="active"
+                                <a class=""
                                    href="/"
                                         >
                                     <i class="fa-solid fa-cat fa-fw"></i>
@@ -390,7 +340,7 @@
 
                     <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
                         
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
                            href="/"
                         >
                             <span>
@@ -433,181 +383,153 @@
         <div class="main-content-body">
 
             
-                <div class="home-sidebar-container">
-    <div class="sticky-container sticky">
-        
-        
-            
-            <div class="sidebar-content" >
-                <div class="avatar flex justify-center">
-    <img src="/images/C09A540F-1556-402E-A151-9AB78FA49559_1_201_a.jpeg">
-</div>
-                <div class="author flex flex-col justify-center my-2.5 mx-0">
-    <div class="name">mewmew77</div>
-    
-        <div class="label">Lv1</div>
-    
-</div>
-                <div class="statistics flex justify-around my-2.5">
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
-        <div class="label text-third-text-color text-sm">Tags</div>
-    </a>
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
-        <div class="label text-third-text-color text-sm">Categories</div>
-    </a>
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
-        <div class="label text-third-text-color text-sm">Posts</div>
-    </a>
-</div>
-            </div>
-        
-
-    </div>
-</div>
-
-            
 
             <div class="main-content">
 
                 
-                    <div class="home-content-container">
-    <ul class="home-article-list">
-        
-            <li class="home-article-item">
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
 
+        <div class="article-title relative w-full">
+            
                 
-
                 
-                    
+                <img src="/images/wallhaven-wqery6-light.webp" alt="ansible 踩坑记录" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
                 
-
-                
-                    <div id="home-article-thumbnail" class="home-article-thumbnail relative h-[150px] overflow-hidden rounded-t-large">
-                        <a href="/2023/06/23/prometheus%E4%BD%BF%E7%94%A8%E7%A9%BA%E9%97%B4%E5%88%86%E6%9E%90/">
-                            <img src="/images/wallhaven-wqery6-light.webp" alt="prometheus 本地存储和内存分析" class="w-full h-full object-cover dark:brightness-75 transition-all" />
-                        </a>
-                    </div>
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-5">
-                    <h3 class="home-article-title">
-                        <a href="/2023/06/23/prometheus%E4%BD%BF%E7%94%A8%E7%A9%BA%E9%97%B4%E5%88%86%E6%9E%90/">
-                            prometheus 本地存储和内存分析
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            prometheus的存储机制：默认每隔2小时做一次数据落盘，在落盘前，所有的数据都保存在内存里
-本地存储占用：计算公式：
-1234needed_disk_space = retention_time_seconds * ingested_sampl...
-                        
-                    </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Fri Jun 23 2023 01:10:17 GMT+0800">
-                
-                    2023-06-23
-                
-            </span>
-        </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fa-solid fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/prometheus/">prometheus</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2023/06/23/prometheus%E4%BD%BF%E7%94%A8%E7%A9%BA%E9%97%B4%E5%88%86%E6%9E%90/">Read more<span class="seo-reader-text">prometheus 本地存储和内存分析</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-bold backdrop-blur-lg rounded-xl border border-border-color ">ansible 踩坑记录</h1>
                 </div>
-            </li>
+            
+            </div>
+
         
-            <li class="home-article-item">
-
-                
-
-                
-                    
-                
-
-                
-                    <div id="home-article-thumbnail" class="home-article-thumbnail relative h-[150px] overflow-hidden rounded-t-large">
-                        <a href="/2023/01/09/ansible-%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">
-                            <img src="/images/wallhaven-wqery6-light.webp" alt="ansible 踩坑记录" class="w-full h-full object-cover dark:brightness-75 transition-all" />
-                        </a>
-                    </div>
-                
-                <div class="flex flex-col gap-5 px-7 pb-7 pt-5">
-                    <h3 class="home-article-title">
-                        <a href="/2023/01/09/ansible-%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">
-                            ansible 踩坑记录
-                        </a>
-                    </h3>
-
-                    <div class="home-article-content markdown-body">
-                        
-                            背景：down掉目标主机网口后，ansible-playbook 执行很长时间才返回ssh连接超时错误
-复现经过：方式一：直接将对应网口down掉，执行ansible-playbook，很快报错，未复现；方式二：先正常执行一次ansible-play...
-                        
-                    </div>
-
-                    <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fa-solid fa-calendars"></i>&nbsp;
-            <span class="home-article-date" data-date="Mon Jan 09 2023 23:21:18 GMT+0800">
-                
-                    2023-01-09
-                
-            </span>
-        </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fa-solid fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/ansible/">ansible</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2023/01/09/ansible-%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">Read more<span class="seo-reader-text">ansible 踩坑记录</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
-</div>
-
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/C09A540F-1556-402E-A151-9AB78FA49559_1_201_a.jpeg">
                 </div>
-            </li>
-        
-    </ul>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">mewmew77</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-01-09 23:21:18</span>
+        <span class="mobile">2023-01-09 23:21:18</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-01-13 01:39:15</span>
+            <span class="mobile">2024-01-13 01:39:15</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
 
-    <div class="home-paginator px-7 py-5">
-        <div class="paginator">
-    <span class="page-number current">1</span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/ansible/">ansible</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
 </div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h2 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h2><p>down掉目标主机网口后，ansible-playbook 执行很长时间才返回ssh连接超时错误</p>
+<h2 id="复现经过："><a href="#复现经过：" class="headerlink" title="复现经过："></a>复现经过：</h2><p>方式一：直接将对应网口down掉，执行ansible-playbook，很快报错，未复现；<br>方式二：先正常执行一次ansible-playbook，执行完成后down掉网口，再次执行ansible-playbook,复现成功；</p>
+<h2 id="问题原因：ssh多路复用"><a href="#问题原因：ssh多路复用" class="headerlink" title="问题原因：ssh多路复用"></a>问题原因：<strong>ssh多路复用</strong></h2><p>为了提升ansible的执行效率，启用了ssh的多路复用（可以认为是建立长链接），即在首次 ssh 连接之后，将该连接保持在后台，并在后续连接时重用该连接，<br>从而减少连接建立和认证的时间，提高连接速度和效率。对应ansible配置文件 <code>ansible/ansible.cfg</code> 内容如下：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh_args = -o ControlMaster=auto -o ControlPersist=600s</span><br></pre></td></tr></table></figure></div>
+<p>也就是说，当网口up时ssh连接成功后会保持这个连接通道，直到600s后过期销毁。<br>在有效期内，down掉目标主机对应网口，再次执行ansible-playbook进行ssh连接，则会重用之前的连接。<br>ssh连接还存在，但目标主机已经不通了，再次使用这个连接就会直到此连接到期销毁才能检测到错误并返回</p>
+<h2 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h2><p>配置文件中添加如下配置参数，每30s对目标节点进行心跳检测，若尝试2次都失败，则销毁此连接；再次重连时就会尝试创建新的ssh连接。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh_args = -o ControlMaster=auto -o ControlPersist=600s -o ServerAliveInterval=30 -o ServerAliveCountMax=2</span><br></pre></td></tr></table></figure></div>
+
+        </div>
+
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/ansible/">#ansible</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/06/23/prometheus%E4%BD%BF%E7%94%A8%E7%A9%BA%E9%97%B4%E5%88%86%E6%9E%90/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">prometheus 本地存储和内存分析</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">ansible 踩坑记录</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%EF%BC%9A"><span class="nav-text">背景：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E7%8E%B0%E7%BB%8F%E8%BF%87%EF%BC%9A"><span class="nav-text">复现经过：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0%EF%BC%9Assh%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-text">问题原因：ssh多路复用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%EF%BC%9A"><span class="nav-text">解决办法：</span></a></li></ol>
 
     </div>
 </div>
+        </div>
+    
+</div>
 
-                    <div class="comment-container pjax"></div>
+
+
                 
 
             </div>
@@ -679,6 +601,23 @@
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-side-tools-container">
@@ -792,7 +731,6 @@
         containers: ["#swup"],
     });
 </script>
-
 
 
 

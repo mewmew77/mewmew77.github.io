@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>ansible 踩坑记录</title>
-    <url>/2024/01/09/ansible-%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
+    <url>/2023/01/09/ansible-%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h2 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h2><p>down掉目标主机网口后，ansible-playbook 执行很长时间才返回ssh连接超时错误</p>
 <h2 id="复现经过："><a href="#复现经过：" class="headerlink" title="复现经过："></a>复现经过：</h2><p>方式一：直接将对应网口down掉，执行ansible-playbook，很快报错，未复现；<br>方式二：先正常执行一次ansible-playbook，执行完成后down掉网口，再次执行ansible-playbook,复现成功；</p>
 <h2 id="问题原因：ssh多路复用"><a href="#问题原因：ssh多路复用" class="headerlink" title="问题原因：ssh多路复用"></a>问题原因：<strong>ssh多路复用</strong></h2><p>为了提升ansible的执行效率，启用了ssh的多路复用（可以认为是建立长链接），即在首次 ssh 连接之后，将该连接保持在后台，并在后续连接时重用该连接，<br>从而减少连接建立和认证的时间，提高连接速度和效率。对应ansible配置文件 <code>ansible/ansible.cfg</code> 内容如下：</p>
@@ -13,6 +13,41 @@
 ]]></content>
       <tags>
         <tag>ansible</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>prometheus 本地存储和内存分析</title>
+    <url>/2023/06/23/prometheus%E4%BD%BF%E7%94%A8%E7%A9%BA%E9%97%B4%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h2 id="prometheus的存储机制："><a href="#prometheus的存储机制：" class="headerlink" title="prometheus的存储机制："></a>prometheus的存储机制：</h2><p>默认每隔2小时做一次数据落盘，在落盘前，所有的数据都保存在内存里</p>
+<h2 id="本地存储占用："><a href="#本地存储占用：" class="headerlink" title="本地存储占用："></a>本地存储占用：</h2><p>计算公式：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">needed_disk_space = retention_time_seconds * ingested_samples_per_second * bytes_per_sample</span><br><span class="line">// retention_time_seconds : 留存时间（s）</span><br><span class="line">// ingested_samples_per_second ： 平均每秒采集的样本数</span><br><span class="line">// bytes_per_sample ： 平均每个样本的大小</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>计算方法</strong>:  </p>
+<ol>
+<li>需要先开启prometheus自监控，修改prometheus.yml配置文件内容如下</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">scrap_configs:</span><br><span class="line">    - job_name: &quot;prometheus&quot;</span><br><span class="line">    static_configs:</span><br><span class="line">        - targets: [&quot;localhots:9090&quot;]</span><br></pre></td></tr></table></figure></div>
+
+<ol start="2">
+<li>使用promQL查询，查询语句如下：</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">留存时间(s)* (rate(prometheus_tsdb_head_samples_appended_total[1d]) *(rate(prometheus_tsdb_compaction_chunk_size_bytes_sum[1d]) / rate(prometheus_tsdb_compaction_chunk_samples_sum[1d])))</span><br><span class="line">// 1d：以一天采集到的指标平均值作为计算标准，可根据实际情况修改</span><br></pre></td></tr></table></figure></div>
+<p>注：以上计算没有把WAL文件加进去</p>
+<h2 id="内存消耗："><a href="#内存消耗：" class="headerlink" title="内存消耗："></a>内存消耗：</h2><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">内存消耗主要由 Prometheus 服务自身的内存消耗、 抓取指标的内存消耗 、 查询带来的内存消耗组成</span><br><span class="line">// 抓取指标的内存消耗： 落盘前抓取到到数据都保存在内存里</span><br><span class="line">// 查询带来的内存消耗： 查询时，若查询时间间隔内的数据不在内存中，则会把这部分数据从磁盘加载到内存里提供查询，从而带来内存消耗</span><br></pre></td></tr></table></figure></div>
+<p>注： 以上计算方法均为估算</p>
+<h2 id="降低内存消耗方法"><a href="#降低内存消耗方法" class="headerlink" title="降低内存消耗方法"></a>降低内存消耗方法</h2><p>核心思想：减少保存到内存到指标样本数量，具体方法如下</p>
+<ol>
+<li>缩短落盘时间间隔<br>修改prometheus启动参数，添加以下参数<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- storage.tsdb.min-block-duration = 30m //最小落盘时间间隔</span><br><span class="line">-- storage.tsdb.max-block-duration = 40m //最大落盘时间间隔</span><br></pre></td></tr></table></figure></div></li>
+<li>减少不必要的指标样本存储；如果能确定，最好之只采集需要的指标<ol>
+<li>从exporter修改，减少暴露给prometheus的指标</li>
+<li>从Prometheus修改，过滤不需要的指标数据。修改prometheus.yml文件内容<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">scrap_configs:</span><br><span class="line">    - job_name: &quot;prometheus&quot;</span><br><span class="line">    static_configs:</span><br><span class="line">        - targets: [&quot;localhots:9090&quot;]</span><br><span class="line">    metric_relabel_configs:</span><br><span class="line">        source_labels: [ __name__]</span><br><span class="line">        regex: ^xxxx*  #要丢弃的指标，支持正则</span><br><span class="line">        action: drop</span><br></pre></td></tr></table></figure></div></li>
+</ol>
+</li>
+</ol>
+<p>参考：<br>官方文档：<a class="link"   href="https://prometheus.io/docs/introduction/overview/" >https://prometheus.io/docs/introduction/overview/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>prometheus使用空间计算器：<a class="link"   href="https://www.robustperception.io/how-much-ram-does-prometheus-2-x-need-for-cardinality-and-ingestion/" >https://www.robustperception.io/how-much-ram-does-prometheus-2-x-need-for-cardinality-and-ingestion/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+]]></content>
+      <tags>
+        <tag>prometheus</tag>
       </tags>
   </entry>
 </search>
