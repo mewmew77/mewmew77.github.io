@@ -50,4 +50,21 @@
         <tag>prometheus</tag>
       </tags>
   </entry>
+  <entry>
+    <title>fiddler对手机抓包</title>
+    <url>/2024/01/16/fiddler%E6%8A%93%E5%8C%85/</url>
+    <content><![CDATA[<h2 id="下载fiddler"><a href="#下载fiddler" class="headerlink" title="下载fiddler"></a>下载fiddler</h2><p><a class="link"   href="https://www.telerik.com/download/fiddler" >https://www.telerik.com/download/fiddler <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>下载后直接根据指引一路安装即可</p>
+<h2 id="查看fiddler分配的ip地址"><a href="#查看fiddler分配的ip地址" class="headerlink" title="查看fiddler分配的ip地址"></a>查看fiddler分配的ip地址</h2><p>点击软件右上角的<code>online</code>按钮，可查看当前ip地址</p>
+<h2 id="查看fiddler使用的端口"><a href="#查看fiddler使用的端口" class="headerlink" title="查看fiddler使用的端口"></a>查看fiddler使用的端口</h2><p>点击 help &gt; About Fiddler 即可查看</p>
+<h2 id="配置手机网络"><a href="#配置手机网络" class="headerlink" title="配置手机网络"></a>配置手机网络</h2><ol>
+<li>将手机和打开fiddler的电脑连接同一个wifi网络下</li>
+<li>手机修改wifi设置 –&gt; 配置代理，选择手动 –&gt; 服务器就是前面查看的fiddler分配的ip地址；端口就是前面查看的fiddler端口</li>
+</ol>
+<p>到这里就完成了，正常的情况下，这时候用手机去访问一些网站就可以通过fiddler查看到这个网站发出的http请求详情了</p>
+<h2 id="实际操作遇到的坑"><a href="#实际操作遇到的坑" class="headerlink" title="实际操作遇到的坑"></a>实际操作遇到的坑</h2><p>使用公司的网络可以，但是家里的wifi或者手机热点都不行<br>解决办法： 关闭使用fiddler的电脑的防火墙</p>
+]]></content>
+      <tags>
+        <tag>fiddler</tag>
+      </tags>
+  </entry>
 </search>
