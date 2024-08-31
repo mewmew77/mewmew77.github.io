@@ -97,7 +97,7 @@
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">fio --client=192.168.0.1 fio1.job --client=192.168.0.2 fio2.job  --client=192.168.0.3 fio3.job </span><br></pre></td></tr></table></figure></div>
 ]]></content>
       <tags>
-        <tag>fiddler</tag>
+        <tag>fio</tag>
       </tags>
   </entry>
 </search>
