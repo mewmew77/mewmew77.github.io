@@ -120,4 +120,31 @@
         <tag>测试</tag>
       </tags>
   </entry>
+  <entry>
+    <title>redis安装</title>
+    <url>/2023/05/03/redis%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<h2 id="单节点安装redis"><a href="#单节点安装redis" class="headerlink" title="单节点安装redis"></a>单节点安装redis</h2><ol>
+<li><p>官网下载redis安装包，地址：<a class="link"   href="https://redis.io/downloads/" >https://redis.io/downloads/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+<li><p>执行以下命令解压</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar xvf redis-7.0.15.tar.gz</span><br></pre></td></tr></table></figure></div></li>
+<li><p>进入解压后的目录，执行make命令进行编译</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd redis-7.0.15</span><br><span class="line">make</span><br></pre></td></tr></table></figure></div></li>
+<li><p>编译完成后进入src目录，执行make install 进行安装，PREFIX参数指定的路径即为redis安装路径</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd src</span><br><span class="line">make install PREFIX=/usr/local/redis</span><br></pre></td></tr></table></figure></div></li>
+<li><p>安装完成后修改redis配置文件<br>查看安装路径 &#x2F;usr&#x2F;local&#x2F;redis&#x2F;bin下是否有redis.conf文件。若没有，则需要取原解压文件下拷贝redis.conf到 &#x2F;usr&#x2F;local&#x2F;redis&#x2F;bin 目录下<br>配置文件修改内容如下，port为redis启动端口，修改时需确认该端口未被占用。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">port 61199</span><br><span class="line">protected-mode no</span><br><span class="line">bind 0.0.0</span><br><span class="line">logfile &quot;/var/log/redis/redis.log&quot;</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>设置redis服务开机自启动，执行一下命令，创建redis系统服务</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/systemd/system/redis.service</span><br></pre></td></tr></table></figure></div>
+<p>输入以下内容并保存</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Redis Server</span><br><span class="line">After=network.target</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/local/redis/bin/redis-server /usr/local/redis/bin/redis.conf</span><br><span class="line">ExecStop=/usr/local/redis/bin/redis-cli shutdown</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target   </span><br></pre></td></tr></table></figure></div></li>
+<li><p>执行以下命令，启动redis</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl deamon-reload</span><br><span class="line">sudo systemctl enable redis.service</span><br><span class="line">sudo systemctl start redis.service</span><br></pre></td></tr></table></figure></div></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>redis</tag>
+      </tags>
+  </entry>
 </search>
