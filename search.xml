@@ -100,4 +100,24 @@
         <tag>fio</tag>
       </tags>
   </entry>
+  <entry>
+    <title>fuzz测试</title>
+    <url>/2024/10/05/fuzz%E6%B5%8B%E8%AF%95/</url>
+    <content><![CDATA[<h3 id="什么是Fuzz测试？"><a href="#什么是Fuzz测试？" class="headerlink" title="什么是Fuzz测试？"></a>什么是Fuzz测试？</h3><p>将自动或半自动生成的随机数据输入到一个程序中，并监视程序异常，如崩溃，断言（assertion）失败，以发现可能的程序错误，比如内存泄漏。</p>
+<h3 id="Go语言实现Fuzz测试"><a href="#Go语言实现Fuzz测试" class="headerlink" title="Go语言实现Fuzz测试"></a>Go语言实现Fuzz测试</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">func FuzzCalculate(f *testing.F) &#123;</span><br><span class="line">	for _, one := range Data &#123;</span><br><span class="line">		f.Add(one.A, one.B)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	f.Fuzz(func(t *testing.T, a, b int) &#123;</span><br><span class="line">		defer func() &#123;</span><br><span class="line">			if r := recover(); r != nil &#123;</span><br><span class="line">				// 实际应用可将此处改为发送邮件/聊天机器人通知等方式通知开发者</span><br><span class="line">				t.Errorf(&quot;params : a %d, b:%d \n ---%v&quot;, a, b, r)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;()</span><br><span class="line"></span><br><span class="line">		res := Div(a, b)</span><br><span class="line">		t.Logf(&quot;res = %v&quot;, res)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="执行Fuzz测试"><a href="#执行Fuzz测试" class="headerlink" title="执行Fuzz测试"></a>执行Fuzz测试</h3><p><code>go test -v -run=FuzzDiv -fuzz=Fuzz -fuzztime 10s</code></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">-fuzz 用于指定要运行的fuzz测试函数的正则表达式</span><br><span class="line">-fuzztime 控制fuzz测试的持续时间</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/fuzz/fuzz-res.png"
+                      alt="Test"
+                ></p>
+]]></content>
+      <tags>
+        <tag>go</tag>
+        <tag>测试</tag>
+      </tags>
+  </entry>
 </search>
